@@ -1,0 +1,36 @@
+name: Continuous Integration Test Pipeline
+
+on:
+  # Pipeline akan otomatis berjalan setiap ada push ke branch 'main'
+  push:
+    branches:
+      - [cite_start]main # Konfigurasi ini sesuai dengan laporan contoh [cite: 32, 33, 34, 35]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4 # Mengambil kode dari repository
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        # [cite_start]Menginstal PyTest dan pytest-html untuk pelaporan [cite: 38]
+        pip install pytest pytest-html
+
+    - name: Run automated tests and generate report
+      run: |
+        # [cite_start]Menjalankan PyTest dan membuat laporan HTML [cite: 38]
+        pytest --html=laporan_hasil_uji.html --self-contained-html
+
+    - name: Upload Test Report Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        [cite_start]name: laporan hasil uji # Nama artifact yang akan diunduh [cite: 38]
+        path: laporan_hasil_uji.html # File laporan yang diunggah
